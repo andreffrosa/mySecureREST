@@ -14,6 +14,14 @@ public class HTTPMessage {
 		
 	}
 	
+	public HTTPMessage(String method, String path, String version, Map<String, String> headers, byte[] body) {
+		this.method = method;
+		this.path = path;
+		this.version = version;
+		this.headers = headers;
+		this.body = body;
+	}
+	
 	public String getPath() {
 		return path;
 	}
@@ -36,6 +44,10 @@ public class HTTPMessage {
 	
 	public String getContentType() {
 		return headers.get("Content-Type");
+	}
+	
+	public String getHeader(String tag) {
+		return headers.get(tag);
 	}
 	
 }
