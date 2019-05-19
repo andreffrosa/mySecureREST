@@ -1,5 +1,5 @@
 package http;
 
-public interface Entity {
+public class Entity {
 
 }
