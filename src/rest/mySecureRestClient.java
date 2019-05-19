@@ -33,6 +33,7 @@ import http.Parser;
 
 public class mySecureRestClient {
 
+	SSLSocketFactory socket_factory;
 	SSLSocket socket;
 	
 	public mySecureRestClient() {
@@ -79,7 +80,7 @@ public class mySecureRestClient {
 	
 	public HTTPReply post(String path, String content_type, byte[] entity) throws IOException {
 		
-		HTTPRequest request = new HTTPRequest("POST", path, "1.1", null, entity, content_type);
+		HTTPRequest request = new HTTPRequest("POST", path, "1.0", null, entity, content_type);
 		
 		System.out.println(new String(request.serialize()));
 	     

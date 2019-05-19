@@ -27,7 +27,7 @@ public class Parser {
 		headers = readHeaders(in);
 		byte[] buffer = extractBody(in, headers);
 		
-		return new HTTPReply(responseStatus[RESPONSE_HTTP_VERSION], Integer.parseInt(responseStatus[CODE]), responseStatus[MESSAGE], headers, buffer, headers.get("Content-Type"));
+		return new HTTPReply(responseStatus[RESPONSE_HTTP_VERSION].replace("HTTP/", ""), Integer.parseInt(responseStatus[CODE]), responseStatus[MESSAGE], headers, buffer, headers.get("Content-Type"));
 	}
 	
 	public static HTTPRequest desserializeRequest(InputStream in) throws IOException {
@@ -40,7 +40,7 @@ public class Parser {
 		headers = readHeaders(in);
 		byte[] buffer = extractBody(in, headers);
 		
-		return new HTTPRequest( responseStatus[METHOD], responseStatus[PATH], responseStatus[REQUEST_HTTP_VERSION], headers, buffer, headers.get("Content-Type"));
+		return new HTTPRequest( responseStatus[METHOD], responseStatus[PATH], responseStatus[REQUEST_HTTP_VERSION].replace("HTTP/", ""), headers, buffer, headers.get("Content-Type"));
 		
 	}
 

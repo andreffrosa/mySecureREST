@@ -14,6 +14,7 @@ import javax.net.ssl.*;
 import http.HTTPReply;
 import http.HTTPRequest;
 import http.Parser;
+import ssl.CustomSSLServerSocketFactory;
 
 public class TLSServerTest {
 
@@ -33,30 +34,20 @@ public class TLSServerTest {
 	}
 	
 	private static SSLServerSocket getServerSocketFactory() throws Exception {
-			KeyStore ks = KeyStore.getInstance("PKCS12");
-			ks.load(new FileInputStream("../SRSC-Proj2/configs/fServer/mainDispatcher/mainDispatcher-keystore.pkcs12"), "SRSC1819".toCharArray());
-			
-			KeyStore ts = KeyStore.getInstance("PKCS12");
-			ts.load(new FileInputStream("../SRSC-Proj2/configs/fServer/mainDispatcher/mainDispatcher-truststore.pkcs12"), "SRSC1819".toCharArray());
-			
-			KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-			kmf.init(ks, "SRSC1819".toCharArray());
-			
-			String[] confciphersuites={"TLS_RSA_WITH_AES_256_CBC_SHA256"};
-	        String[] confprotocols={"TLSv1.2"};
-			
-			SSLContext sc = SSLContext.getInstance("TLS");
-			sc.init(getKeyManager(ks, "SRSC1819"), getTrustManager(ts), null);
-			
-			SSLServerSocketFactory ssf = sc.getServerSocketFactory();
-			SSLServerSocket s 
-			= (SSLServerSocket) ssf.createServerSocket(8080);
-
-			s.setEnabledProtocols(confprotocols);
-			s.setEnabledCipherSuites(confciphersuites); 
-			s.setNeedClientAuth(true);
-			
-			return s;
+		String ks_password = "SRSC1819";
+		
+		KeyStore ks = KeyStore.getInstance("PKCS12");
+		ks.load(new FileInputStream("../SRSC-Proj2/configs/fServer/mainDispatcher/mainDispatcher-keystore.pkcs12"), ks_password.toCharArray());
+		
+		KeyStore ts = KeyStore.getInstance("PKCS12");
+		ts.load(new FileInputStream("../SRSC-Proj2/configs/fServer/mainDispatcher/mainDispatcher-truststore.pkcs12"), ks_password.toCharArray());
+		
+		String[] ciphersuites={"TLS_RSA_WITH_AES_256_CBC_SHA256"};
+        String[] protocols={"TLSv1.2"};
+		
+        boolean authenticate_clients = true;
+        
+		return (SSLServerSocket) new CustomSSLServerSocketFactory(ks, ks_password, ts, ciphersuites, protocols, authenticate_clients).createServerSocket(8080);
 	}
 	
 	private static KeyManager[] getKeyManager(KeyStore ks, String ks_password) throws NoSuchAlgorithmException, UnrecoverableKeyException, KeyStoreException {

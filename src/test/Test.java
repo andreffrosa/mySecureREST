@@ -18,6 +18,8 @@ public class Test {
 		HTTPReply reply = client.post("/", "text/html; charset=utf-8", "ola".getBytes());
 		
 		System.out.println(new String(reply.serialize()));
+		
+		System.out.println(reply.getHTTPVersion());
 	}
 	
 	
