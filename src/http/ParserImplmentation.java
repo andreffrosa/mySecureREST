@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ParserImplmentation implements Parser {
+public class ParserImplmentation {
 
 	private static final int METHOD = 0;
 	private static final int PATH = 1;
@@ -16,43 +16,35 @@ public class ParserImplmentation implements Parser {
 	private static final int CODE = 1;
 	private static final int MESSAGE = 2;
 
-	public ParserImplmentation() {
-		// TODO Auto-generated constructor stub
-	}
+	public ParserImplmentation() {	}
 
-	@Override
-	public byte[] serialize(HTTPMessage httpMessage) {
 
-		return null;
-	}
-
-	@Override
-	public HTTPReply desseralizeReply(InputStream in) throws IOException {
+	public static HTTPReply desseralizeReply(InputStream in) throws IOException {
 
 		Map<String, String> headers = new HashMap<>();
 
 		String[] responseStatus = readLine(in).split(" ", 2); // [HttpVersion, Code, Message]	
 		headers = readHeaders(in);
-		byte[] buffer = extractData(in, headers);
+		byte[] buffer = extractBody(in, headers);
 		
 		return new HTTPReply(responseStatus[RESPONSE_HTTP_VERSION], Integer.parseInt(responseStatus[CODE]), responseStatus[MESSAGE], headers, buffer);
 	}
 	
-	public HTTPRequest desserializeRequest(InputStream in) throws IOException {
+	public static HTTPRequest desserializeRequest(InputStream in) throws IOException {
 		
 		Map<String, String> headers ;
 
-		String[] responseStatus = readLine(in).split(" "); // [HttpVersion, Code, Message]	
+		String[] responseStatus = readLine(in).split(" "); // [Method, Path, HttpVersion]	
 		
 		//Process headers
 		headers = readHeaders(in);
-		byte[] buffer = extractData(in, headers);
+		byte[] buffer = extractBody(in, headers);
 		
 		return new HTTPRequest( responseStatus[METHOD], responseStatus[PATH], responseStatus[REQUEST_HTTP_VERSION], headers, buffer);
 		
 	}
 
-	private byte[] extractData(InputStream in, Map<String, String> headers) throws IOException {
+	private static byte[] extractBody(InputStream in, Map<String, String> headers) throws IOException {
 		int size = Integer.parseInt( headers.get("Content-Length") );
 		byte[] buffer = new byte[size];
 
@@ -63,7 +55,7 @@ public class ParserImplmentation implements Parser {
 		return buffer;
 	}
 
-	private Map<String, String> readHeaders(InputStream in) throws IOException {
+	private static Map<String, String> readHeaders(InputStream in) throws IOException {
 		
 		Map<String, String> headers = new HashMap<String, String>();
 		String headerString;
@@ -78,7 +70,7 @@ public class ParserImplmentation implements Parser {
     /**
      * Reads one message from the HTTP header
      */
-    private String readLine(InputStream in ) throws IOException {
+    private static String readLine(InputStream in ) throws IOException {
 
       StringBuffer sb = new StringBuffer() ;
 
