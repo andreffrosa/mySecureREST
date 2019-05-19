@@ -3,6 +3,7 @@
  */
 package http;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -16,13 +17,13 @@ public interface Parser {
 	 * @param httpMessage Message to send.
 	 * @return The message in a byte array form factor.
 	 */
-	public byte[] serialize( HTTPMessage httpMessage );
+	public byte[] serialize( HTTPMessage httpMessage )  throws IOException;
 	
 	/**
 	 * Returns a HttpMessage from raw data that arrived on the socket.
 	 * @param in Inputstream of the socket
 	 * @return The message.
 	 */
-	public HTTPMessage desseralizeReply(InputStream in );
+	public HTTPMessage desseralizeReply(InputStream in )  throws IOException;
 
 }

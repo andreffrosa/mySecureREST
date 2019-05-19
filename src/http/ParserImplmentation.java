@@ -27,30 +27,28 @@ public class ParserImplmentation implements Parser {
 	}
 
 	@Override
-	public HttpReply desseralizeReply(InputStream in) {
+	public HTTPReply desseralizeReply(InputStream in) throws IOException {
 
 		Map<String, String> headers = new HashMap<>();
-		byte[] content;
 
 		String[] responseStatus = readLine(in).split(" ", 2); // [HttpVersion, Code, Message]	
 		headers = readHeaders(in);
 		byte[] buffer = extractData(in, headers);
 		
-		return new HttpReply(responseStatus[RESPONSE_HTTP_VERSION], responseStatus[CODE], responseStatus[MESSAGE], headers, buffer);
+		return new HTTPReply(responseStatus[RESPONSE_HTTP_VERSION], Integer.parseInt(responseStatus[CODE]), responseStatus[MESSAGE], headers, buffer);
 	}
 	
-	public HTTPRequest desserializeRequest(InputStream in) {
+	public HTTPRequest desserializeRequest(InputStream in) throws IOException {
 		
 		Map<String, String> headers ;
-		byte[] content;
 
-		String[] responseStatus = readLine(in).split(" ", 2); // [HttpVersion, Code, Message]	
+		String[] responseStatus = readLine(in).split(" "); // [HttpVersion, Code, Message]	
 		
 		//Process headers
 		headers = readHeaders(in);
 		byte[] buffer = extractData(in, headers);
 		
-		return new HTTPRequest(responseStatus[RESPONSE_HTTP_VERSION], responseStatus[METHOD], responseStatus[PATH], headers, buffer);
+		return new HTTPRequest( responseStatus[METHOD], responseStatus[PATH], responseStatus[REQUEST_HTTP_VERSION], headers, buffer);
 		
 	}
 
