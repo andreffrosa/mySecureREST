@@ -1,6 +1,7 @@
 package http;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -15,10 +16,10 @@ public abstract class HTTPMessage {
 	protected HTTPMessage() {
 	}
 	
-	protected HTTPMessage(String version, Map<String, String> headers, byte[] body) {
+	protected HTTPMessage(String version, Map<String, String> headers, byte[] body, String type) {
 		this.version = version;
-		this.headers = headers;
-		this.body = body;
+		this.headers = headers == null ? new HashMap<>() : headers;
+		setBody(body, type);
 	}
 	
 	public String getHTTPVersion() {
@@ -57,7 +58,7 @@ public abstract class HTTPMessage {
 	
 	protected static final String SEPARATOR = "\r\n";
 	protected static final String DATE_PATTERN = "Date: " + SEPARATOR;
-	protected static final String HEADER_PATTERN = "%: %s" + SEPARATOR;
+	protected static final String HEADER_PATTERN = "%s: %s" + SEPARATOR;
 	
 	protected abstract String getFirstLine();
 	
@@ -68,15 +69,15 @@ public abstract class HTTPMessage {
 		// Insert first line
 		request.append(getFirstLine());
 		
-		// Insert current time
-		request.append(String.format(DATE_PATTERN, new Date().toString()));
+		// Insert Current Time
+		headers.put("Date", new Date().toString());
 
-		// Insert headers
+		// Insert Headers
 		for(Entry<String, String> entry : headers.entrySet() ){
 			request.append(String.format(HEADER_PATTERN, entry.getKey(), entry.getValue()));
 		}
 
-		// Finish header
+		// Finish Header
 		request.append(SEPARATOR);
 		
 		byte[] header = request.toString().getBytes();

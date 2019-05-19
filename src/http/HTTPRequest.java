@@ -9,8 +9,8 @@ public class HTTPRequest extends HTTPMessage {
 	private String method;
 	private String path;
 	
-	public HTTPRequest(String method, String path, String version, Map<String, String> headers, byte[] body) {
-		super(version, headers, body);
+	public HTTPRequest(String method, String path, String version, Map<String, String> headers, byte[] body, String type) {
+		super(version, headers, body, type);
 		this.method = method;
 		this.path = path;
 	}

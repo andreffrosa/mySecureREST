@@ -23,11 +23,11 @@ public class Parser {
 
 		Map<String, String> headers = new HashMap<>();
 
-		String[] responseStatus = readLine(in).split(" ", 2); // [HttpVersion, Code, Message]	
+		String[] responseStatus = readLine(in).split(" ", 3); // [HttpVersion, Code, Message]	
 		headers = readHeaders(in);
 		byte[] buffer = extractBody(in, headers);
 		
-		return new HTTPReply(responseStatus[RESPONSE_HTTP_VERSION], Integer.parseInt(responseStatus[CODE]), responseStatus[MESSAGE], headers, buffer);
+		return new HTTPReply(responseStatus[RESPONSE_HTTP_VERSION], Integer.parseInt(responseStatus[CODE]), responseStatus[MESSAGE], headers, buffer, headers.get("Content-Type"));
 	}
 	
 	public static HTTPRequest desserializeRequest(InputStream in) throws IOException {
@@ -40,7 +40,7 @@ public class Parser {
 		headers = readHeaders(in);
 		byte[] buffer = extractBody(in, headers);
 		
-		return new HTTPRequest( responseStatus[METHOD], responseStatus[PATH], responseStatus[REQUEST_HTTP_VERSION], headers, buffer);
+		return new HTTPRequest( responseStatus[METHOD], responseStatus[PATH], responseStatus[REQUEST_HTTP_VERSION], headers, buffer, headers.get("Content-Type"));
 		
 	}
 
@@ -60,8 +60,8 @@ public class Parser {
 		Map<String, String> headers = new HashMap<String, String>();
 		String headerString;
 		while( !(headerString = readLine(in)).equals("") ){
-			String[] ans = headerString.split(": ");
-			headers.put(ans[0] , ans[1]);
+			String[] ans = headerString.split(":");
+			headers.put(ans[0].trim() , ans[1].trim());
 		}
 		
 		return headers;

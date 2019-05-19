@@ -9,8 +9,8 @@ public class HTTPReply extends HTTPMessage {
 	private int status_code;
 	private String status_message;
 	
-	public HTTPReply(String version, int status_code, String status_message,  Map<String, String> headers, byte[] body) {
-		super(version, headers, body);
+	public HTTPReply(String version, int status_code, String status_message,  Map<String, String> headers, byte[] body, String type) {
+		super(version, headers, body, type);
 		this.status_code = status_code;
 		this.status_message = status_message;
 	}
