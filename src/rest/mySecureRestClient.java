@@ -54,17 +54,21 @@ public class mySecureRestClient {
 		return this;
 	}
 	
-	public HTTPReply post(String path, String content_type, byte[] entity) throws UnknownHostException, IOException {
+	public Response post(String path, String content_type, byte[] entity) throws UnknownHostException, IOException {
 		
 		HTTPRequest request = new HTTPRequest("POST", path, "1.0", null, entity, content_type);
 		
-		System.out.println(new String(request.serialize()));
+		System.out.println(new String(request.serialize())); // TEMP
 	    
 		Socket socket = newSocket(endpoint.getHost(), endpoint.getPort());
 		
 	    socket.getOutputStream().write(request.serialize());
 	    
-	    return Parser.desseralizeReply(socket.getInputStream());
+	    HTTPReply reply = Parser.desseralizeReply(socket.getInputStream());
+	    
+	    System.out.println(new String(reply.serialize())); // TEMP
+	    
+	    return new Response(reply);
 	}
 
 }

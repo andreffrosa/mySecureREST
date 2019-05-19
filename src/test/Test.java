@@ -9,6 +9,7 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 import http.HTTPReply;
+import rest.Response;
 import rest.mySecureRestClient;
 import ssl.CustomSSLSocketFactory;
 
@@ -31,7 +32,7 @@ public class Test {
 		
 		mySecureRestClient client = new mySecureRestClient(factory, location);
 		
-		HTTPReply reply = client.post("/", "text/html; charset=utf-8", "ola".getBytes());
+		Response response = client.post("/", "text/html; charset=utf-8", "ola".getBytes());
 		
 		System.out.println(new String(reply.serialize()));
 		
