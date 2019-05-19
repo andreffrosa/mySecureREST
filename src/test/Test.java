@@ -1,14 +1,10 @@
 package test;
 
 import java.io.FileInputStream;
-import java.net.InetAddress;
-import java.net.URL;
 import java.security.KeyStore;
 
-import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
-import http.HTTPReply;
 import rest.Response;
 import rest.mySecureRestClient;
 import ssl.CustomSSLSocketFactory;
@@ -17,8 +13,6 @@ public class Test {
 
 	public static void main(String[] args) throws Exception {
 		String location = "https://localhost:8080/";
-		
-		//System.setProperty("javax.net.ssl.trustStrore", "../SRSC-Proj2/configs/client/client-truststore.pkcs12");
 		
 		String ks_password = "SRSC1819";
 		
@@ -32,11 +26,7 @@ public class Test {
 		
 		mySecureRestClient client = new mySecureRestClient(factory, location);
 		
-		Response response = client.post("/", "text/html; charset=utf-8", "ola".getBytes());
-		
-		System.out.println(new String(reply.serialize()));
-		
-		System.out.println(reply.getHTTPVersion());
+		Response response = client.post("/path", "text/html; charset=utf-8", "ola".getBytes());
 	}
 	
 	
