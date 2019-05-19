@@ -1,33 +1,24 @@
 package http;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Map.Entry;
 
-public class HTTPMessage {
+import util.ArrayUtil;
 
-	private String method;
-	private String path;
-	private String version;
-	private Map<String, String> headers;
-	private byte[] body;
+public abstract class HTTPMessage {
+
+	protected String version;
+	protected Map<String, String> headers;
+	protected byte[] body;
 	
-	public HTTPMessage() {
-		
+	protected HTTPMessage() {
 	}
 	
-	public HTTPMessage(String method, String path, String version, Map<String, String> headers, byte[] body) {
-		this.method = method;
-		this.path = path;
+	protected HTTPMessage(String version, Map<String, String> headers, byte[] body) {
 		this.version = version;
 		this.headers = headers;
 		this.body = body;
-	}
-	
-	public String getPath() {
-		return path;
-	}
-	
-	public String getMethod() {
-		return method;
 	}
 	
 	public String getHTTPVersion() {
@@ -50,4 +41,49 @@ public class HTTPMessage {
 		return headers.get(tag);
 	}
 	
+	public void addHeader(String tag, String value) {
+		headers.put(tag, value);
+	}
+	
+	public void setVersion(String version) {
+		this.version = version;
+	}
+	
+	public void setBody(byte[] body, String type) {
+		this.body = body;
+		addHeader("Content-Length", "" + body.length);
+		addHeader("Content-Type", type);
+	}
+	
+	protected static final String SEPARATOR = "\r\n";
+	protected static final String DATE_PATTERN = "Date: " + SEPARATOR;
+	protected static final String HEADER_PATTERN = "%: %s" + SEPARATOR;
+	
+	protected abstract String getFirstLine();
+	
+	public byte[] serialize() {
+		
+		StringBuilder request = new StringBuilder();
+		
+		// Insert first line
+		request.append(getFirstLine());
+		
+		// Insert current time
+		request.append(String.format(DATE_PATTERN, new Date().toString()));
+
+		// Insert headers
+		for(Entry<String, String> entry : headers.entrySet() ){
+			request.append(String.format(HEADER_PATTERN, entry.getKey(), entry.getValue()));
+		}
+
+		// Finish header
+		request.append(SEPARATOR);
+		
+		byte[] header = request.toString().getBytes();
+		
+		// Append body and return
+		return ArrayUtil.concat(header, body);
+	}
+	
 }
+
