@@ -21,15 +21,17 @@ public class CustomSSLServerSocketFactory extends SSLServerSocketFactory {
 	boolean authenticate_clients;
 
 	public CustomSSLServerSocketFactory(KeyStore ks, String ks_password, KeyStore ts, String[] ciphersuites, String[] protocols, boolean authenticate_clients) throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
-		this.sslServerSocketFactory = getServerSocketFactory(ks, ks_password, ts);
+		this.sslServerSocketFactory = getServerSocketFactory(ks, ks_password, ts, protocols);
 		this.ciphersuites = ciphersuites;
 		this.protocols = protocols;
 		this.authenticate_clients = authenticate_clients;
 	}
 	
-	private SSLServerSocketFactory getServerSocketFactory(KeyStore ks, String ks_password, KeyStore ts) throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
+	private SSLServerSocketFactory getServerSocketFactory(KeyStore ks, String ks_password, KeyStore ts, String[] protocols) throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
 	
-		SSLContext sc = SSLContext.getInstance("TLS");
+		String tls_version = protocols.length == 1 ? protocols[0] : "TLS";
+		
+		SSLContext sc = SSLContext.getInstance(tls_version);
 		sc.init(SSLUtils.getKeyManager(ks, ks_password), SSLUtils.getTrustManager(ts), null);
 		
 		return sc.getServerSocketFactory();

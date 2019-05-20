@@ -1,4 +1,4 @@
-package rest;
+package rest.client;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
