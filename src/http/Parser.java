@@ -2,6 +2,8 @@ package http;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,6 +83,37 @@ public class Parser {
         sb.append( new Character( (char)c) ) ;
       }
       return sb.toString() ;
+    }
+    
+    public static Map<String, String> parseParamss(String fullUrl){
+    	
+    	Map<String, String> result = new HashMap<>();
+        if (fullUrl == null)
+            return result;
+
+        int last = 0, next, l = fullUrl.length();
+        while (last < l) {
+            next = fullUrl.indexOf('&', last);
+            if (next == -1)
+                next = l;
+
+            if (next > last) {
+                int eqPos = fullUrl.indexOf('=', last);
+                try {
+                    if (eqPos < 0 || eqPos > next)
+                        result.put(URLDecoder.decode(fullUrl.substring(last, next), "utf-8"), "");
+                    else
+                        result.put(URLDecoder.decode(fullUrl.substring(last, eqPos), "utf-8"), URLDecoder.decode(fullUrl.substring(eqPos + 1, next), "utf-8"));
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e); // will never happen, utf-8 support is mandatory for java
+                }
+            }
+            last = next + 1;
+        }
+        return result;
+    	
+    	
+    	
     }
 
 }

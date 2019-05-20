@@ -5,7 +5,8 @@ import java.security.KeyStore;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import rest.client.Response;
+import http.HTTPReply;
+import http.MediaType;
 import rest.client.mySecureRestClient;
 import ssl.CustomSSLSocketFactory;
 
@@ -26,9 +27,17 @@ public class Test {
 		
 		mySecureRestClient client = new mySecureRestClient(factory, location);
 		
-		Response response = client.post("/path", "text/html; charset=utf-8", "ola".getBytes());
+		Human leitao = new Human("Joao", "Leitao");
+		Human andre = new Human("andre", "rosa");
+		leitao.setSon(andre);
+		
+		String msg = "EHEHEHEHEH grande fdp este agajotina";
+		
+		
+		HTTPReply response = client.post("/path", MediaType.APPLICATION_JSON /*+ "; charset=utf-8"*/, leitao);
 	}
 	
+
 	
 
 }

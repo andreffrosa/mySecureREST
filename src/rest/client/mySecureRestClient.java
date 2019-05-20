@@ -15,6 +15,7 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 
+import http.Entity;
 import http.HTTPReply;
 import http.HTTPRequest;
 import http.Parser;
@@ -54,9 +55,10 @@ public class mySecureRestClient {
 		return this;
 	}
 	
-	public Response post(String path, String content_type, byte[] entity) throws UnknownHostException, IOException {
+	public HTTPReply post(String path, String content_type, Object object) throws UnknownHostException, IOException {
 		
-		HTTPRequest request = new HTTPRequest("POST", path, "1.0", null, entity, content_type);
+		
+		HTTPRequest request = new HTTPRequest("POST", path, "1.0", null, Entity.entity(object).getBytes(), content_type);
 		
 		System.out.println(new String(request.serialize())); // TEMP
 	    
@@ -66,9 +68,10 @@ public class mySecureRestClient {
 	    
 	    HTTPReply reply = Parser.desseralizeReply(socket.getInputStream());
 	    
+	    System.out.println("\nRecebi");
 	    System.out.println(new String(reply.serialize())); // TEMP
 	    
-	    return new Response(reply);
+	    return reply;
 	}
 
 }
