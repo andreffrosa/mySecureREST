@@ -14,6 +14,7 @@ import java.security.cert.CertificateException;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
+import javax.ws.rs.core.Response;
 
 import http.HTTPReply;
 import http.HTTPRequest;
@@ -65,6 +66,8 @@ public class mySecureRestClient {
 	    socket.getOutputStream().write(request.serialize());
 	    
 	    HTTPReply reply = Parser.desseralizeReply(socket.getInputStream());
+	    
+	    
 	    
 	    System.out.println(new String(reply.serialize())); // TEMP
 	    

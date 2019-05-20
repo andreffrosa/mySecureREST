@@ -1,17 +1,17 @@
 package rest;
 
-import http.Entity;
-import http.HTTPReply;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
 
 public interface Client {
 	
-	public HTTPReply post(String path, Entity entity) ;
+	public Response post(String path, Entity<?> entity) ;
 	
-	public HTTPReply get(String path);
+	public Response get(String path);
 	
-	public HTTPReply put(String path, Entity entity);
+	public Response put(String path, Entity<?> entity);
 	
-	public HTTPReply delete(String path);
+	public Response delete(String path);
 	
 
 }
