@@ -39,7 +39,7 @@ public class TLSServerTest {
 
 		SSLServerSocketFactory factory =  new CustomSSLServerSocketFactory(ks, ks_password, ts, ciphersuites, protocols, authenticate_clients);
 
-		mySecureRestServer server = new mySecureRestServer(8080, null, factory);
+		mySecureRestServer server = new mySecureRestServer(8080, new myHelloWorld(), factory);
 
 		server.start();
 

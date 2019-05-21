@@ -27,14 +27,9 @@ public class Test {
 		
 		mySecureRestClient client = new mySecureRestClient(factory, location);
 		
-		Human leitao = new Human("Joao", "Leitao");
-		Human andre = new Human("andre", "rosa");
-		leitao.setSon(andre);
-		
 		String msg = "EHEHEHEHEH grande fdp este agajotina";
 		
-		
-		HTTPReply response = client.post("/path", MediaType.APPLICATION_JSON /*+ "; charset=utf-8"*/, leitao);
+		HTTPReply response = client.post("/dispatcher/login/bina", MediaType.APPLICATION_JSON /*+ "; charset=utf-8"*/, "não empina"); // TODO: passar só objecto e intrepertar o media type lá dentro
 	}
 	
 

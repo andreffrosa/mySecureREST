@@ -38,7 +38,7 @@ public class Mapper {
 		
 		// tem de se converter o body depois de retirar do http request, de acordo com o ConsumesType
 
-		Object result = invoke("POST", "/dispatcher/login/bina", body, ya, h);
+		Object result = invoke("POST", "/dispatcher/login/bina?asd=gay", body, ya, h);
 		
 		// tem de se converter o result de acordo com o ProducesType para serializar e enviar para o cliente
 
