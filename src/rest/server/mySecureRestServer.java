@@ -66,6 +66,7 @@ public class mySecureRestServer {
 						reply_status_code = 500;
 						reply_status_msg = "Internal Server Error";
 						reply_body = new byte[0];
+						e.printStackTrace();
 					}		
 					
 					HTTPReply reply = new HTTPReply("1.0", reply_status_code, reply_status_msg, null, reply_body, reply_content_type); // TODO: Acrescentar para quando o body é null criar um array[0] lá dentros

@@ -1,5 +1,6 @@
 package rest.server;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -19,6 +20,7 @@ import org.glassfish.jersey.server.model.ResourceMethod;
 import org.glassfish.jersey.uri.UriTemplate;
 
 import http.HTTPRequest;
+import util.URI_Utils;
 
 public class AppMarionete {
 
@@ -32,11 +34,11 @@ public class AppMarionete {
 
 	public Object invoke(String http_method, String path, Object body) throws Exception {
 		
-		String filtered_path = path; // TODO: remover os query params
+		String[] splitted_path = URI_Utils.splitPath(path);
 		
-		Map<String, String> query_params = new HashMap<>(); // TODO: fazer parse dos query params
+		Map<String, String> query_params = URI_Utils.parseParams(splitted_path[1], "UTF-8"); // TODO: Receber charset do cleinte
 		
-		Object result = invoke_method(http_method.toUpperCase(), filtered_path, query_params, body);
+		Object result = invoke_method(http_method.toUpperCase(), splitted_path[0], query_params, body);
 		
 		return result;
 	}
@@ -96,6 +98,7 @@ public class AppMarionete {
 				Map<String, String> path_params = match(path , method.getKey());
 
 				if(path_params != null) {
+					
 					Method m = method.getValue().getInvocable().getDefinitionMethod();
 					
 					Object[] args = parseArguments(m, path_params, query_params, body);
@@ -109,7 +112,7 @@ public class AppMarionete {
 		throw new RuntimeException("Method not found!");
 	}
 
-	private static Object[] parseArguments(Method m, Map<String, String> path_params, Map<String, String> query_params, Object body) {
+	private static Object[] parseArguments(Method m, Map<String, String> path_params, Map<String, String> query_params, Object body) throws UnsupportedEncodingException {
 		List<Object> args = new ArrayList<>(m.getParameters().length);
 
 		for( Parameter p : m.getParameters() ) {
@@ -130,7 +133,7 @@ public class AppMarionete {
 						javax.ws.rs.PathParam x = (javax.ws.rs.PathParam) a;
 
 						String key = x.value();
-						String value = path_params.get(key);
+						String value = URI_Utils.decode(path_params.get(key), "UTF-8");
 
 						args.add(value);
 
@@ -149,7 +152,6 @@ public class AppMarionete {
 						break;
 					}
 				}
-
 			}
 		}
 

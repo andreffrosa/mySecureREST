@@ -9,6 +9,7 @@ import http.HTTPReply;
 import http.MediaType;
 import rest.client.mySecureRestClient;
 import ssl.CustomSSLSocketFactory;
+import util.URI_Utils;
 
 public class Test {
 
@@ -29,7 +30,7 @@ public class Test {
 		
 		String msg = "EHEHEHEHEH grande fdp este agajotina";
 		
-		HTTPReply response = client.post("/dispatcher/login/bina", MediaType.APPLICATION_JSON /*+ "; charset=utf-8"*/, "não empina"); // TODO: passar só objecto e intrepertar o media type lá dentro
+		HTTPReply response = client.post("/dispatcher/login/" + URI_Utils.enconde("bina/chupina", "UTF-8") + "?size=3cm", MediaType.APPLICATION_JSON /*+ "; charset=utf-8"*/, "não empina"); // TODO: passar só objecto e intrepertar o media type lá dentro
 	}
 	
 
