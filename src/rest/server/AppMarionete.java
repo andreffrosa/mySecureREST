@@ -30,8 +30,7 @@ public class AppMarionete {
 		this.marionete = createMarionete(handler);
 	}
 
-	public Object invoke(String http_method, String path, Object body) throws Exception { // Passar este objecto ou passar os args em separado?
-		// TODO
+	public Object invoke(String http_method, String path, Object body) throws Exception {
 		
 		String filtered_path = path; // TODO: remover os query params
 		
