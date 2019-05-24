@@ -6,11 +6,13 @@ public class RestRequest {
   private String path;
   private Socket socket;
   private Map<String,String> queryParams;
+  private Map<String,String> http_headers;
   
   public RestRequest(Socket socket, String base_path) {
     this.socket = socket;
     this.path = base_path;
     this.queryParams = new HashMap<>();
+    this.http_headers = new HashMap<>();
   }
   
   // TODO: Fazer para booleans, ints, longs, doubles e arrays e listas
@@ -34,16 +36,19 @@ public class RestRequest {
       query += separator + e.getKey() + "=" + e.getValue();
     }
     
-    // serializar a entity com base no seu tipo
-    byte[] http_body = null;
+    // serializar a entity com base no seu tipo -> TODO
+    byte[] http_body = entity == null ? new byte[0] : serilize entity; 
+    String content_type = "";
     
     // Criar HTTPRequest
-    HTTPRequest http_request = new HTTPRequest(method, this.path + query, http_body);
+    HTTPRequest http_request = new HTTPRequest(method, this.path + query, "1.0", http_headers, http_body, content_type);
     
     // utilizar o socket para enviar request
-    this.socket.
+    this.socket.getOutputStream().write(request.serialize());
+    // TODO: Forçar um flush?
     
     // Esperar por uma reply 
+    HTTPReply http_reply = Parser.desseralizeReply(socket.getInputStream()); // TODO: passar este método para a class HTTPReply
     
     // Fechar o socket
     socket.close();
