@@ -32,13 +32,13 @@ public class AppMarionete {
 		this.marionete = createMarionete(handler);
 	}
 
-	public Object invoke(String http_method, String path, Object body) throws Exception {
+	public Object invoke(String http_method, String path, byte[] body, String content_type) throws Exception {
 		
 		String[] splitted_path = URI_Utils.splitPath(path);
 		
 		Map<String, String> query_params = URI_Utils.parseParams(splitted_path[1], "UTF-8"); // TODO: Receber charset do cleinte
 		
-		Object result = invoke_method(http_method.toUpperCase(), splitted_path[0], query_params, body);
+		Object result = invoke_method(http_method.toUpperCase(), splitted_path[0], query_params, body, content_type);
 		
 		return result;
 	}
@@ -89,7 +89,7 @@ public class AppMarionete {
 		return marionete;
 	}
 
-	private Object invoke_method(String http_method, String path, Map<String, String> query_params, Object body) throws Exception {
+	private Object invoke_method(String http_method, String path, Map<String, String> query_params, byte[] body, String content_type) throws Exception {
 
 		Map<String, ResourceMethod> method_set = marionete.get(http_method);
 		if(method_set != null) {
@@ -101,7 +101,7 @@ public class AppMarionete {
 					
 					Method m = method.getValue().getInvocable().getDefinitionMethod();
 					
-					Object[] args = parseArguments(m, path_params, query_params, body);
+					Object[] args = parseArguments(m, path_params, query_params, body, content_type);
 					
 					return m.invoke(this.handler, args);
 					
@@ -112,7 +112,7 @@ public class AppMarionete {
 		throw new RuntimeException("Method not found!");
 	}
 
-	private static Object[] parseArguments(Method m, Map<String, String> path_params, Map<String, String> query_params, Object body) throws UnsupportedEncodingException {
+	private static Object[] parseArguments(Method m, Map<String, String> path_params, Map<String, String> query_params, byte[] body, String content_type) throws UnsupportedEncodingException {
 		List<Object> args = new ArrayList<>(m.getParameters().length);
 
 		for( Parameter p : m.getParameters() ) {
@@ -122,7 +122,8 @@ public class AppMarionete {
 			boolean isBody = p.getAnnotations().length == 0;
 			if(isBody) {
 				System.out.println("isBody " + isBody);
-				args.add(body); 
+				Object entity = Entity.deserialize(content_type, body, p.getAnnotatedType());
+				args.add(entity); 
 			} else {
 
 				// Iterate method annotations

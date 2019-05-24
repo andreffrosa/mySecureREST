@@ -50,14 +50,15 @@ public class mySecureRestServer {
 					
 					try {
 						HTTPRequest request = Parser.desserializeRequest(client_socket.getInputStream()); // TODO: meter para enviar excepções se estiver mal feito
+	
+						Object result = this.marionete.invoke(request.getMethod(), request.getPath(), request.getBody());
 						
-						Object body = new String(request.getBody()); // TODO: deserializar
-						
-						this.marionete.invoke(request.getMethod(), request.getPath(), body);
-						
+						Entry<String, byte[]> e = Entity.serialize(result);
+
 						reply_status_code = 200;
 						reply_status_msg = "OK";
-						reply_body = new byte[0];
+						reply_body = e.getValue();
+						reply_body = e.getKey();
 						
 					} catch(ProcessingException e) {
 						
