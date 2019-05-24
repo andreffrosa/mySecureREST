@@ -20,7 +20,7 @@ import http.HTTPReply;
 import http.HTTPRequest;
 import http.Parser;
 
-public class mySecureRestClient {
+public class mySecureRestClient implements Client {
 
 	SocketFactory socket_factory;
 	URL endpoint;
@@ -55,23 +55,10 @@ public class mySecureRestClient {
 		return this;
 	}
 	
-	public HTTPReply post(String path, String content_type, Object object) throws UnknownHostException, IOException {
-		
-		
-		HTTPRequest request = new HTTPRequest("POST", path, "1.0", null, Entity.entity(object).getBytes(), content_type);
-		
-		System.out.println(new String(request.serialize())); // TEMP
-	    
-		Socket socket = newSocket(endpoint.getHost(), endpoint.getPort());
-		
-	    socket.getOutputStream().write(request.serialize());
-	    
-	    HTTPReply reply = Parser.desseralizeReply(socket.getInputStream());
-	    
-	    System.out.println("\nRecebi");
-	    System.out.println(new String(reply.serialize())); // TEMP
-	    
-	    return reply;
+	@Override
+	public RestResponse request(String base_path) {
+	    Socket socket = newSocket(endpoint.getHost(), endpoint.getPort());
+	    return new RestRequest(socket, base_path);
 	}
-
+	
 }
