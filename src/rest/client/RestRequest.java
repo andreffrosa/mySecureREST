@@ -37,8 +37,9 @@ public class RestRequest {
     }
     
     // serializar a entity com base no seu tipo -> TODO
-    byte[] http_body = entity == null ? new byte[0] : serilize entity; 
-    String content_type = "";
+    Entry<String,byte[]> serialized_entity = Entity.serialize(entity);
+    byte[] http_body = serialized_entity.getValue();
+    String content_type = serialized_entity.getKey();
     
     // Criar HTTPRequest
     HTTPRequest http_request = new HTTPRequest(method, this.path + query, "1.0", http_headers, http_body, content_type);
@@ -54,7 +55,7 @@ public class RestRequest {
     socket.close();
     
     // Criar uma resposta
-    return new RestResponse();
+    return new RestResponse(http_reply);
   }
 
   public RestResponse post(Object entity) {
