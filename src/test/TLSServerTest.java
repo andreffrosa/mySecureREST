@@ -13,7 +13,6 @@ import javax.net.ssl.*;
 
 import http.HTTPReply;
 import http.HTTPRequest;
-import http.Parser;
 import rest.server.mySecureRestServer;
 import ssl.CustomSSLServerSocketFactory;
 
@@ -51,7 +50,7 @@ public class TLSServerTest {
 
 		SSLSocket c = (SSLSocket) s.accept();
 
-		HTTPRequest request = Parser.desserializeRequest(c.getInputStream());
+		HTTPRequest request = HTTPRequest.deserializeRequest(c.getInputStream());
 
 		System.out.println(new String(request.serialize()));
 

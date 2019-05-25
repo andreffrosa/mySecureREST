@@ -1,5 +1,8 @@
 package http;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HTTPReply extends HTTPMessage {
@@ -40,7 +43,7 @@ public class HTTPReply extends HTTPMessage {
 		this.status_message = status_message;
 	}
 	
-	public static HTTPReply desseralizeReply(InputStream in) throws IOException {
+	public static HTTPReply deseralizeReply(InputStream in) throws IOException {
 
 		Map<String, String> headers = new HashMap<>();
 

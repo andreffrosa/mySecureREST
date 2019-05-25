@@ -5,11 +5,9 @@ import java.security.KeyStore;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import http.HTTPReply;
-import http.MediaType;
+import rest.client.RestResponse;
 import rest.client.mySecureRestClient;
 import ssl.CustomSSLSocketFactory;
-import util.URI_Utils;
 
 public class Test {
 
@@ -28,12 +26,24 @@ public class Test {
 		
 		mySecureRestClient client = new mySecureRestClient(factory, location);
 		
-		String msg = "EHEHEHEHEH grande fdp este agajotina";
+		RestResponse response = client.newRequest("/dispatcher")
+				                      .addPathParam("login")
+								      .addPathParam("bina")
+								      .addQueryParam("size", "3cm")
+								      .post("não desatina");
 		
-		HTTPReply response = client.post("/dispatcher/login/" + URI_Utils.enconde("bina/chupina", "UTF-8") + "?size=3cm", MediaType.APPLICATION_JSON /*+ "; charset=utf-8"*/, "não empina"); // TODO: passar só objecto e intrepertar o media type lá dentro
+		System.out.println(response.getStatusCode());
+		System.out.println(response.getEntity(boolean.class));
+		
+		response = client.newRequest("/dispatcher")
+                  .addPathParam("cp")
+			      .addPathParam("bina")
+			      .addQueryParam("origin", "dir1/dir2/")
+			      .addQueryParam("dest", "dir3/dir4/")
+			      .put("");
+		
+		System.out.println(response.getStatusCode());
+		System.out.println(response.getEntity(boolean.class));
 	}
-	
-
-	
 
 }

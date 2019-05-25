@@ -1,5 +1,7 @@
 package http;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -130,29 +132,6 @@ public abstract class HTTPMessage {
       }
 
       return sb.toString() ;
-    }
-
-    
-
-    public static Map<String, String> parseParamss(String fullUrl) throws MalformedURLException{
-
-    	Map<String, String> result = new HashMap<>();
-
-        if (fullUrl == null)
-            return result;
-
-        String[] params = new URL(fullUrl).getQuery().split("&");
-
-        for(String param: params) {
-
-        	String[] paramAndValue = param.split("=");
-
-        	if(paramAndValue.length > 1) 
-        		result.put(paramAndValue[0], paramAndValue[1]);
-        	else
-        		result.put(paramAndValue[0], "");
-        }
-    	return result;
     }
 	
 }

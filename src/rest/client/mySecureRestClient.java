@@ -15,11 +15,6 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 
-import http.Entity;
-import http.HTTPReply;
-import http.HTTPRequest;
-import http.Parser;
-
 public class mySecureRestClient implements Client {
 
 	SocketFactory socket_factory;
@@ -48,17 +43,16 @@ public class mySecureRestClient implements Client {
 		return socket;
 	}
 	
+	@Override
 	public mySecureRestClient setLocation(String location) throws MalformedURLException {
-		
 		this.endpoint = new URL(location);
-		
 		return this;
 	}
-	
+
 	@Override
-	public RestResponse request(String base_path) {
-	    Socket socket = newSocket(endpoint.getHost(), endpoint.getPort());
-	    return new RestRequest(socket, base_path);
+	public RestRequest newRequest(String resource_path) throws UnknownHostException, IOException {
+		 Socket socket = newSocket(endpoint.getHost(), endpoint.getPort());
+		 return new RestRequest(socket, resource_path);
 	}
 	
 }

@@ -1,21 +1,19 @@
 package util;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class URI_Utils {
 
-	public static String enconde(String param, String charset) throws UnsupportedEncodingException {
+	public static String encode(String param, String charset) throws UnsupportedEncodingException {
 		return URLEncoder.encode(param, charset);
 	}
 	
-	public static String enconde(String param) throws UnsupportedEncodingException {
+	public static String encode(String param) throws UnsupportedEncodingException {
 		return URLEncoder.encode(param, "UTF-8");
 	}
 	
@@ -50,15 +48,18 @@ public class URI_Utils {
 		int index1 = extended_path.indexOf("?");
 		int index2 = extended_path.length();
 		
-		return new String[] {extended_path.substring(0, index1), extended_path.substring(index1+1, index2)};
+		if(index1 == -1)
+			return new String[] {extended_path, ""};
+		else
+			return new String[] {extended_path.substring(0, index1), extended_path.substring(index1+1, index2)};
 	}
 	
     public static Map<String, String> parseParams(String query, String charset) throws MalformedURLException, UnsupportedEncodingException{
     	
     	Map<String, String> result = new HashMap<>();
-        if (query == null)
+        if (query == null || query.equals(""))
             return result;
-
+        
         String[] params = query.split("&");
         for(String param: params) {
         	String[] paramAndValue = param.split("=");

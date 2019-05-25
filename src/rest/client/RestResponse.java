@@ -1,12 +1,13 @@
 package rest.client;
 
 import http.HTTPReply;
+import rest.Entity;
 
 public class RestResponse {
 
 	private HTTPReply http_reply;
 	
-	public Response(HTTPReply reply) {
+	public RestResponse(HTTPReply reply) {
 		this.http_reply = reply;
 	}
 	
@@ -14,7 +15,8 @@ public class RestResponse {
 	    return http_reply.getStatusCode();
 	}
 	
-	public Object getEntity(Class<T> c) {
-	    // TODO:
+	public <T> T getEntity(Class<T> c) {
+	    return Entity.deserialize(http_reply.getContentType(), http_reply.getBody(), c);
 	}
+	
 }

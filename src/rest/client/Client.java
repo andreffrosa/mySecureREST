@@ -1,18 +1,13 @@
 package rest.client;
 
-import http.Entity;
-import http.HTTPReply;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 
 public interface Client {
 	
-	/*public HTTPReply post(String path, Entity entity) ;
+	public mySecureRestClient setLocation(String location) throws MalformedURLException;
 	
-	public HTTPReply get(String path);
-	
-	public HTTPReply put(String path, Entity entity);
-	
-	public HTTPReply delete(String path);*/
-	
-	public RestRequest newRequest(String resource_path);
+	public RestRequest newRequest(String resource_path) throws UnknownHostException, IOException;
 	
 }

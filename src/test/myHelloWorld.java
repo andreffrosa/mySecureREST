@@ -12,7 +12,7 @@ public class myHelloWorld implements HelloWorld {
 
 	@Override
 	public List<String> listFiles(String username, String path) {
-		// TODO Auto-generated method stub
+		System.out.println(username + " " + path);
 		return null;
 	}
 
@@ -24,7 +24,7 @@ public class myHelloWorld implements HelloWorld {
 
 	@Override
 	public boolean upload(String username, String path, byte[] data) {
-		// TODO Auto-generated method stub
+		System.out.println(username + " " + path + " " + new String(data));
 		return false;
 	}
 
@@ -36,7 +36,7 @@ public class myHelloWorld implements HelloWorld {
 
 	@Override
 	public boolean copy(String username, String origin, String dest) {
-		// TODO Auto-generated method stub
+		System.out.println(username + " " + origin + " " + dest);
 		return false;
 	}
 

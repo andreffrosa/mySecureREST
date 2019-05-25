@@ -1,5 +1,6 @@
 package test;
 
+import http.MediaType;
 import rest.server.AppMarionete;
 
 public class MarioneteTester {
@@ -9,9 +10,9 @@ public class MarioneteTester {
 		
 		AppMarionete marionete = new AppMarionete(h);
 		
-		Object body = new String("não empina");
+		String body = new String("não desatina");
 		
-		marionete.invoke("POST", "/dispatcher/login/bina", body);
+		marionete.invoke("POST", "/dispatcher/login/bina", body.getBytes(), MediaType.TEXT_PLAIN);
 	}
 
 }

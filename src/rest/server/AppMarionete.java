@@ -2,6 +2,7 @@ package rest.server;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.AbstractMap;
@@ -13,13 +14,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 
-import javax.ws.rs.PathParam;
-
 import org.glassfish.jersey.server.model.Resource;
 import org.glassfish.jersey.server.model.ResourceMethod;
 import org.glassfish.jersey.uri.UriTemplate;
 
-import http.HTTPRequest;
+import rest.Entity;
 import util.URI_Utils;
 
 public class AppMarionete {
@@ -89,7 +88,7 @@ public class AppMarionete {
 		return marionete;
 	}
 
-	private Object invoke_method(String http_method, String path, Map<String, String> query_params, byte[] body, String content_type) throws Exception {
+	private Object invoke_method(String http_method, String path, Map<String, String> query_params, byte[] body, String content_type) throws MethodNotFoundException, UnsupportedEncodingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		Map<String, ResourceMethod> method_set = marionete.get(http_method);
 		if(method_set != null) {
@@ -109,26 +108,22 @@ public class AppMarionete {
 			}
 		}
 
-		throw new RuntimeException("Method not found!");
+		throw new MethodNotFoundException(path + " does not match any method!");
 	}
 
 	private static Object[] parseArguments(Method m, Map<String, String> path_params, Map<String, String> query_params, byte[] body, String content_type) throws UnsupportedEncodingException {
 		List<Object> args = new ArrayList<>(m.getParameters().length);
 
 		for( Parameter p : m.getParameters() ) {
-			System.out.println(p.getName() + " " + p.getType().getName());
-			System.out.println(p.getAnnotatedType().toString());
 
 			boolean isBody = p.getAnnotations().length == 0;
 			if(isBody) {
-				System.out.println("isBody " + isBody);
-				Object entity = Entity.deserialize(content_type, body, p.getAnnotatedType());
+				Object entity = Entity.deserialize(content_type, body, p.getType());
 				args.add(entity); 
 			} else {
 
 				// Iterate method annotations
 				for(Annotation a : p.getAnnotations()) {
-					System.out.println( "annotaion: " + a.toString());
 
 					if(a instanceof javax.ws.rs.PathParam) {
 						javax.ws.rs.PathParam x = (javax.ws.rs.PathParam) a;
@@ -138,10 +133,7 @@ public class AppMarionete {
 
 						args.add(value);
 
-						System.out.println("PathParam: " + key + "=" + value);
-
 						break;
-
 					} else if(a instanceof javax.ws.rs.QueryParam) {
 						javax.ws.rs.QueryParam x = (javax.ws.rs.QueryParam) a;
 						String key = x.value();
@@ -149,7 +141,6 @@ public class AppMarionete {
 
 						args.add(value);
 
-						System.out.println("QueryParam: " + key + "=" + value);
 						break;
 					}
 				}
@@ -164,10 +155,8 @@ public class AppMarionete {
 		UriTemplate template = new UriTemplate(pattern);
 
 		if( template.match(path, map) ) {
-			System.out.println("Matched, " + map); // Debug
 			return map;
 		} else {
-			System.out.println("Not matched, " + map); // Debug
 			return null;
 		}   
 	}

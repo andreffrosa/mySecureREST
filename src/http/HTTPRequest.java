@@ -1,5 +1,7 @@
 package http;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 public class HTTPRequest extends HTTPMessage {
@@ -39,7 +41,7 @@ public class HTTPRequest extends HTTPMessage {
 		return String.format(REQUEST_PATTERN, method, path, version).toString();
 	}
 	
-	public static HTTPRequest desserializeRequest(InputStream in) throws IOException {
+	public static HTTPRequest deserializeRequest(InputStream in) throws IOException {
 
 		Map<String, String> headers ;
 
