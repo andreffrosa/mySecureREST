@@ -9,7 +9,7 @@ public class Human{
 	
 	public Human(String name, String surname) {
 		this.name = name;
-		this.surname = surname;
+		this.setSurname(surname);
 	}
 	
 	public void setSon(Human son) {
@@ -22,6 +22,14 @@ public class Human{
 
 	public byte[] getBytes() {
 		return data;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 	
 }

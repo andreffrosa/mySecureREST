@@ -20,7 +20,7 @@ public class JerseyResourceScanner {
         runClass.scan(myHelloWorld.class);
     }
 
-    public void scan(Class baseClass) {
+    public <T> void scan(Class<T> baseClass) {
         Resource resource = Resource.builder(baseClass).build();
         String uriPrefix = "";
         process(uriPrefix, resource);
