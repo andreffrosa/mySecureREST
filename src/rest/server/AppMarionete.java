@@ -131,7 +131,7 @@ public class AppMarionete {
 						String key = x.value();
 						String value = URI_Utils.decode(path_params.get(key), "UTF-8");
 
-						args.add(value);
+						args.add(parseString(value, p.getType()));
 
 						break;
 					} else if(a instanceof javax.ws.rs.QueryParam) {
@@ -139,7 +139,7 @@ public class AppMarionete {
 						String key = x.value();
 						String value = query_params.get(key);
 
-						args.add(value);
+						args.add(parseString(value, p.getType()));
 
 						break;
 					}
@@ -148,6 +148,21 @@ public class AppMarionete {
 		}
 
 		return args.toArray(new Object[args.size()]);
+	}
+	
+	private static <T> Object parseString(String s, Class<T> type) {
+		
+		if(type.equals(String.class)) {
+			return s;
+		} else if(type.equals(Long.class)) {
+			return Long.parseLong(s);
+		} else if(type.equals(Integer.class)) {
+			return Integer.parseInt(s);
+		} else if(type.equals(Double.class)) {
+			return Double.parseDouble(s);
+		} 
+		
+		return null;
 	}
 
 	private static Map<String, String> match(String path, String pattern) {
