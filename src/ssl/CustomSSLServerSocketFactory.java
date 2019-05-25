@@ -7,6 +7,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 
 import javax.net.ssl.SSLContext;
@@ -21,18 +22,25 @@ public class CustomSSLServerSocketFactory extends SSLServerSocketFactory {
 	boolean authenticate_clients;
 
 	public CustomSSLServerSocketFactory(KeyStore ks, String ks_password, KeyStore ts, String[] ciphersuites, String[] protocols, boolean authenticate_clients) throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
-		this.sslServerSocketFactory = getServerSocketFactory(ks, ks_password, ts, protocols);
+		this.sslServerSocketFactory = getServerSocketFactory(ks, ks_password, ts, protocols, null);
 		this.ciphersuites = ciphersuites;
 		this.protocols = protocols;
 		this.authenticate_clients = authenticate_clients;
 	}
 	
-	private SSLServerSocketFactory getServerSocketFactory(KeyStore ks, String ks_password, KeyStore ts, String[] protocols) throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
+	public CustomSSLServerSocketFactory(KeyStore ks, String ks_password, KeyStore ts, String[] ciphersuites, String[] protocols, boolean authenticate_clients, SecureRandom sr) throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
+		this.sslServerSocketFactory = getServerSocketFactory(ks, ks_password, ts, protocols, sr);
+		this.ciphersuites = ciphersuites;
+		this.protocols = protocols;
+		this.authenticate_clients = authenticate_clients;
+	}
+
+	private SSLServerSocketFactory getServerSocketFactory(KeyStore ks, String ks_password, KeyStore ts, String[] protocols, SecureRandom sr) throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
 	
 		String tls_version = protocols.length == 1 ? protocols[0] : "TLS";
 		
 		SSLContext sc = SSLContext.getInstance(tls_version);
-		sc.init(SSLUtils.getKeyManager(ks, ks_password), SSLUtils.getTrustManager(ts), null);
+		sc.init(SSLUtils.getKeyManager(ks, ks_password), SSLUtils.getTrustManager(ts), sr);
 		
 		return sc.getServerSocketFactory();
 	}
