@@ -86,5 +86,74 @@ public abstract class HTTPMessage {
 		return ArrayUtil.concat(header, body);
 	}
 	
+	protected static byte[] extractBody(InputStream in, Map<String, String> headers) throws IOException {
+
+		int size = Integer.parseInt( headers.get("Content-Length") );
+
+		byte[] buffer = new byte[size];
+
+		int n = 0;
+		while( n < size){
+			n += in.read(buffer, n, size-n);
+		}
+
+		return buffer;
+	}
+
+	protected static Map<String, String> readHeaders(InputStream in) throws IOException {
+
+		Map<String, String> headers = new HashMap<String, String>();
+
+		String headerString;
+
+		while( !(headerString = readLine(in)).equals("") ){
+			String[] ans = headerString.split(":");
+
+			headers.put(ans[0].trim() , ans[1].trim());
+		}
+
+		return headers;
+	}
+
+    /**
+     * Reads one message from the HTTP header
+     */
+    protected static String readLine(InputStream in ) throws IOException {
+      StringBuffer sb = new StringBuffer() ;
+
+      int c ;
+      while( (c = in.read() ) >= 0 ) {
+        if( c == '\r' ) continue ;
+        if( c == '\n' ) break ;
+
+        sb.append( new Character( (char)c) ) ;
+      }
+
+      return sb.toString() ;
+    }
+
+    
+
+    public static Map<String, String> parseParamss(String fullUrl) throws MalformedURLException{
+
+    	Map<String, String> result = new HashMap<>();
+
+        if (fullUrl == null)
+            return result;
+
+        String[] params = new URL(fullUrl).getQuery().split("&");
+
+        for(String param: params) {
+
+        	String[] paramAndValue = param.split("=");
+
+        	if(paramAndValue.length > 1) 
+        		result.put(paramAndValue[0], paramAndValue[1]);
+        	else
+        		result.put(paramAndValue[0], "");
+        }
+    	return result;
+    }
+	
 }
 
