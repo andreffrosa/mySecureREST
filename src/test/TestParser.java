@@ -5,7 +5,7 @@ import java.net.MalformedURLException;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import util.URI_Utils;
+import utility.URI_Utils;
 
 public class TestParser {
 

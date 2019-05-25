@@ -1,4 +1,4 @@
-package util;
+package utility;
 
 public class ArrayUtil {
 
@@ -16,5 +16,9 @@ public class ArrayUtil {
 	    System.arraycopy(b, 0, r, a.length, b.length);
 	    return r;
 	}
+	
+	/*public static <T> String toString(T[] array) {
+		String s = ""
+	}*/
 	
 }

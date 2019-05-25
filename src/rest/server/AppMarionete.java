@@ -19,7 +19,7 @@ import org.glassfish.jersey.server.model.ResourceMethod;
 import org.glassfish.jersey.uri.UriTemplate;
 
 import rest.Entity;
-import util.URI_Utils;
+import utility.URI_Utils;
 
 public class AppMarionete {
 

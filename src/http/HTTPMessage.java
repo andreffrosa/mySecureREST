@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import util.ArrayUtil;
+import utility.ArrayUtil;
 
 public abstract class HTTPMessage {
 

@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import http.HTTPReply;
 import http.HTTPRequest;
 import rest.Entity;
-import util.URI_Utils;
+import utility.URI_Utils;
 
 public class RestRequest {
 

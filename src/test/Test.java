@@ -17,10 +17,10 @@ public class Test {
 		String ks_password = "SRSC1819";
 		
 		KeyStore ks = KeyStore.getInstance("PKCS12");
-		ks.load(new FileInputStream("../SRSC-Proj2/configs/fServer/mainDispatcher/mainDispatcher-keystore.pkcs12"), ks_password.toCharArray());
+		ks.load(new FileInputStream("../SRSC-Proj2/configs/client/client-keystore.pkcs12"), ks_password.toCharArray());
 		
 		KeyStore ts = KeyStore.getInstance("PKCS12");
-		ts.load(new FileInputStream("../SRSC-Proj2/configs/fServer/mainDispatcher/mainDispatcher-truststore.pkcs12"), ks_password.toCharArray());
+		ts.load(new FileInputStream("../SRSC-Proj2/configs/client/client-truststore.pkcs12"), ks_password.toCharArray());
 		
 		SSLSocketFactory factory = new CustomSSLSocketFactory(ks, ks_password, ts);
 		
