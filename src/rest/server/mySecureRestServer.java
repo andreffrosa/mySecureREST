@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLServerSocketFactory;
 
 import http.HTTPReply;
 import http.HTTPRequest;
@@ -29,7 +30,12 @@ public class mySecureRestServer {
 	private synchronized ServerSocket getServerSocket() throws IOException {
 		return factory.createServerSocket(port);
 	}
-
+	
+	public String getAddress() {
+		String proto = factory instanceof SSLServerSocketFactory ? "https" : "http";
+		return proto + "://0.0.0.0:" + port + "/";
+	}
+	
 	public void start() {
 
 		// Lança thread que recebe pedidos REST
