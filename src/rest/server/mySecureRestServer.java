@@ -11,10 +11,12 @@ import javax.net.ssl.SSLServerSocketFactory;
 
 import http.HTTPReply;
 import http.HTTPRequest;
+import http.MediaType;
 import rest.Entity;
+import rest.client.RestResponse;
 
 public class mySecureRestServer {
-	
+
 	private AppMarionete marionete;
 	private AtomicBoolean closed;
 	private ServerSocketFactory factory;
@@ -30,12 +32,12 @@ public class mySecureRestServer {
 	private synchronized ServerSocket getServerSocket() throws IOException {
 		return factory.createServerSocket(port);
 	}
-	
+
 	public String getAddress() {
 		String proto = factory instanceof SSLServerSocketFactory ? "https" : "http";
 		return proto + "://0.0.0.0:" + port + "/";
 	}
-	
+
 	public void start() {
 
 		// Lança thread que recebe pedidos REST
@@ -47,41 +49,33 @@ public class mySecureRestServer {
 				while(!closed.get()) {
 					// Accepts inbound connection
 					Socket client_socket = server_socket.accept();
-	
-					int reply_status_code = 0;
-					String reply_status_msg = "";
-					byte[] reply_body = null;
-					String reply_content_type = "";
-					
+
+					HTTPReply reply = null;
+
 					try {
 						HTTPRequest request = HTTPRequest.deserializeRequest(client_socket.getInputStream()); // TODO: meter para enviar excepções se estiver mal feito
-	
-						Object result = this.marionete.invoke(request.getMethod(), request.getPath(), request.getBody(), request.getContentType());
-						
-						Entry<String, byte[]> e = Entity.serialize(result);
 
-						reply_status_code = 200;
-						reply_status_msg = "OK";
-						reply_body = e.getValue();
-						reply_content_type = e.getKey();
+						Object result = this.marionete.invoke(request.getMethod(), request.getPath(), request.getBody(), request.getContentType());
+
+						if(result instanceof RestResponse) {
+							reply = ((RestResponse) result).getHTTPReply();
+						} else {
+							Entry<String, byte[]> e = Entity.serialize(result);
+
+							reply = new HTTPReply("1.0", 200, "OK", null, e.getValue(), e.getKey());
+						}
 					} catch(MethodNotFoundException e) {
-						// Send HTTP 500
-						reply_status_code = 404;
-						reply_status_msg = "Not Found";
-						reply_body = e.getMessage().getBytes();
+						// Send HTTP 404
+						reply = new HTTPReply("1.0", 404, "Not Found", null, e.getMessage().getBytes(), MediaType.TEXT_PLAIN);
 					} catch(Exception e) {
 						// Send HTTP 500
-						reply_status_code = 500;
-						reply_status_msg = "Internal Server Error";
-						reply_body = new byte[0];
+						reply = new HTTPReply("1.0", 500, "Internal Server Error", null, e.getMessage().getBytes(), MediaType.TEXT_PLAIN);
 						e.printStackTrace();
 					}		
-					
-					HTTPReply reply = new HTTPReply("1.0", reply_status_code, reply_status_msg, null, reply_body, reply_content_type);
-					
+
 					// Send Reply
 					client_socket.getOutputStream().write(reply.serialize());
-					
+
 					client_socket.close();
 				}
 
