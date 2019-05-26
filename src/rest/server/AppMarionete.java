@@ -170,7 +170,6 @@ public class AppMarionete {
 		UriTemplate template = new UriTemplate(pattern);
 
 		if( template.match(path, map) ) {
-			System.out.println(path + " -> " + pattern);
 			return map;
 		} else {
 			return null;
