@@ -19,13 +19,11 @@ public class CustomSSLServerSocketFactory extends SSLServerSocketFactory {
 	private final SSLServerSocketFactory sslServerSocketFactory;
 	private String[] ciphersuites;
 	private String[] protocols;
-	boolean authenticate_clients;
+	private boolean authenticate_clients;
+	private SecureRandom sr;
 
 	public CustomSSLServerSocketFactory(KeyStore ks, String ks_password, KeyStore ts, String[] ciphersuites, String[] protocols, boolean authenticate_clients) throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
-		this.sslServerSocketFactory = getServerSocketFactory(ks, ks_password, ts, protocols, null);
-		this.ciphersuites = ciphersuites;
-		this.protocols = protocols;
-		this.authenticate_clients = authenticate_clients;
+		this(ks, ks_password, ts, ciphersuites, protocols, authenticate_clients, null);
 	}
 	
 	public CustomSSLServerSocketFactory(KeyStore ks, String ks_password, KeyStore ts, String[] ciphersuites, String[] protocols, boolean authenticate_clients, SecureRandom sr) throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
@@ -33,6 +31,7 @@ public class CustomSSLServerSocketFactory extends SSLServerSocketFactory {
 		this.ciphersuites = ciphersuites;
 		this.protocols = protocols;
 		this.authenticate_clients = authenticate_clients;
+		this.sr = sr;
 	}
 
 	private SSLServerSocketFactory getServerSocketFactory(KeyStore ks, String ks_password, KeyStore ts, String[] protocols, SecureRandom sr) throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
@@ -44,7 +43,19 @@ public class CustomSSLServerSocketFactory extends SSLServerSocketFactory {
 		
 		return sc.getServerSocketFactory();
 	}
+	
+	public String[] getTLSVersions() {
+		return protocols;
+	}
 
+	public boolean clientAuthentication() {
+		return authenticate_clients;
+	}
+	
+	public SecureRandom getSecureRandom() {
+		return sr;
+	}
+	
 	private SSLServerSocket adjustEnabledCipherSuites(SSLServerSocket socket) throws IOException {
 
 		socket.setEnabledCipherSuites(ciphersuites);

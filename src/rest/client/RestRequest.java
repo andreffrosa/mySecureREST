@@ -55,8 +55,6 @@ public class RestRequest {
 		// Criar HTTPRequest
 		HTTPRequest http_request = new HTTPRequest(method, this.path + query, "1.0", http_headers, http_body, content_type);
 
-		System.out.println(new String(http_request.serialize()));
-		
 		// utilizar o socket para enviar request
 		this.socket.getOutputStream().write(http_request.serialize());
 		// TODO: Forçar um flush?

@@ -133,7 +133,7 @@ public class AppMarionete {
 
 						args.add(parseString(value, p.getType()));
 
-						break;
+						//break;
 					} else if(a instanceof javax.ws.rs.QueryParam) {
 						javax.ws.rs.QueryParam x = (javax.ws.rs.QueryParam) a;
 						String key = x.value();
@@ -141,7 +141,7 @@ public class AppMarionete {
 
 						args.add(parseString(value, p.getType()));
 
-						break;
+						//break;
 					}
 				}
 			}
@@ -154,11 +154,11 @@ public class AppMarionete {
 		
 		if(type.equals(String.class)) {
 			return s;
-		} else if(type.equals(Long.class)) {
+		} else if(type.equals(long.class) || type.equals(long.class)) {
 			return Long.parseLong(s);
-		} else if(type.equals(Integer.class)) {
+		} else if(type.equals(Integer.class) || type.equals(int.class)) {
 			return Integer.parseInt(s);
-		} else if(type.equals(Double.class)) {
+		} else if(type.equals(Double.class) || type.equals(double.class)) {
 			return Double.parseDouble(s);
 		} 
 		
@@ -170,6 +170,7 @@ public class AppMarionete {
 		UriTemplate template = new UriTemplate(pattern);
 
 		if( template.match(path, map) ) {
+			System.out.println(path + " -> " + pattern);
 			return map;
 		} else {
 			return null;
