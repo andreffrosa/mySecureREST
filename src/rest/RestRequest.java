@@ -25,8 +25,9 @@ public class RestRequest {
 		this.http_headers = new HashMap<>();
 	}
 
-	public void addHeader(String key, String value) {
+	public RestRequest addHeader(String key, String value) {
 		http_headers.put(key, value);
+		return this;
 	}
 	
 	// TODO: Fazer para booleans, ints, longs, doubles e arrays e listas
