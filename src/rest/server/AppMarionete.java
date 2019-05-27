@@ -60,6 +60,8 @@ public class AppMarionete {
 			String pathPrefix = current.getKey() + (resource.getPath() != null ? resource.getPath() : "" );
 
 			for (ResourceMethod method : resource.getAllMethods()) {
+			
+				System.out.println(method.toString());
 
 				// If has sub resources
 				if (method.getType().equals(ResourceMethod.JaxrsType.SUB_RESOURCE_LOCATOR)) {
@@ -76,6 +78,7 @@ public class AppMarionete {
 					}
 
 					http_method_map.put(pathPrefix, method);
+					System.out.println(http_method + " " +pathPrefix);
 				}
 			}
 
@@ -89,7 +92,7 @@ public class AppMarionete {
 	}
 
 	private Object invoke_method(String http_method, String path, Map<String, String> query_params, byte[] body, String content_type, Map<String,String> http_headers) throws MethodNotFoundException, UnsupportedEncodingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-
+		
 		Map<String, ResourceMethod> method_set = marionete.get(http_method);
 		if(method_set != null) {
 			for(Entry<String, ResourceMethod> method : method_set.entrySet()) {
@@ -142,8 +145,14 @@ public class AppMarionete {
 						args.add(parseString(value, p.getType()));
 
 						//break;
-					} else if(a instanceof javax.ws.rs.core.Context) {
-						args.add(http_headers);
+					} else if(a instanceof javax.ws.rs.HeaderParam) {
+						javax.ws.rs.HeaderParam x = (javax.ws.rs.HeaderParam) a;
+						
+						String key = x.value();
+						String value = query_params.get(key);
+
+						args.add(parseString(value, p.getType()));
+						//args.add(http_headers);
 					}
 				}
 			}
@@ -171,6 +180,8 @@ public class AppMarionete {
 		Map<String, String> map = new HashMap<String, String>();
 		UriTemplate template = new UriTemplate(pattern);
 
+		System.out.println(path + " " + pattern);
+		
 		if( template.match(path, map) ) {
 			return map;
 		} else {
