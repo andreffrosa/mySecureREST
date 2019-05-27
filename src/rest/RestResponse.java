@@ -1,10 +1,10 @@
-package rest.client;
+package rest;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import http.HTTPReply;
-import rest.Entity;
 
 public class RestResponse {
 
@@ -16,7 +16,11 @@ public class RestResponse {
 	
 	public RestResponse(String version, int status_code, String status_message, Object entity) {
 		Entry<String, byte[]> e = Entity.serialize(entity);
-		this.http_reply = new HTTPReply(version, status_code, status_message, null, e.getValue(), e.getKey());
+		this.http_reply = new HTTPReply(version, status_code, status_message, new HashMap<>(), e.getValue(), e.getKey());
+	}
+	
+	public void addHeader(String key, String value) {
+		http_reply.addHeader(key, value);
 	}
 	
 	public HTTPReply getHTTPReply() {

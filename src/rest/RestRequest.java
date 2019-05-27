@@ -1,4 +1,4 @@
-package rest.client;
+package rest;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 
 import http.HTTPReply;
 import http.HTTPRequest;
-import rest.Entity;
 import utility.URI_Utils;
 
 public class RestRequest {
@@ -26,6 +25,10 @@ public class RestRequest {
 		this.http_headers = new HashMap<>();
 	}
 
+	public void addHeader(String key, String value) {
+		http_headers.put(key, value);
+	}
+	
 	// TODO: Fazer para booleans, ints, longs, doubles e arrays e listas
 	public RestRequest addPathParam(String param) throws UnsupportedEncodingException {
 		this.path += "/" + URI_Utils.encode(param);

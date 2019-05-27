@@ -13,7 +13,7 @@ import http.HTTPReply;
 import http.HTTPRequest;
 import http.MediaType;
 import rest.Entity;
-import rest.client.RestResponse;
+import rest.RestResponse;
 
 public class mySecureRestServer {
 
@@ -55,7 +55,7 @@ public class mySecureRestServer {
 					try {
 						HTTPRequest request = HTTPRequest.deserializeRequest(client_socket.getInputStream()); // TODO: meter para enviar excepções se estiver mal feito
 
-						Object result = this.marionete.invoke(request.getMethod(), request.getPath(), request.getBody(), request.getContentType());
+						Object result = this.marionete.invoke(request.getMethod(), request.getPath(), request.getBody(), request.getContentType(), request.getHeaders());
 
 						if(result instanceof RestResponse) {
 							reply = ((RestResponse) result).getHTTPReply();

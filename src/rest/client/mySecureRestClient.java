@@ -15,6 +15,8 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 
+import rest.RestRequest;
+
 public class mySecureRestClient implements Client {
 
 	SocketFactory socket_factory;

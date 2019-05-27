@@ -31,13 +31,13 @@ public class AppMarionete {
 		this.marionete = createMarionete(handler);
 	}
 
-	public Object invoke(String http_method, String path, byte[] body, String content_type) throws Exception {
+	public Object invoke(String http_method, String path, byte[] body, String content_type, Map<String,String> http_headers) throws Exception {
 		
 		String[] splitted_path = URI_Utils.splitPath(path);
 		
 		Map<String, String> query_params = URI_Utils.parseParams(splitted_path[1], "UTF-8"); // TODO: Receber charset do cleinte
 		
-		Object result = invoke_method(http_method.toUpperCase(), splitted_path[0], query_params, body, content_type);
+		Object result = invoke_method(http_method.toUpperCase(), splitted_path[0], query_params, body, content_type, http_headers);
 		
 		return result;
 	}
@@ -88,7 +88,7 @@ public class AppMarionete {
 		return marionete;
 	}
 
-	private Object invoke_method(String http_method, String path, Map<String, String> query_params, byte[] body, String content_type) throws MethodNotFoundException, UnsupportedEncodingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	private Object invoke_method(String http_method, String path, Map<String, String> query_params, byte[] body, String content_type, Map<String,String> http_headers) throws MethodNotFoundException, UnsupportedEncodingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		Map<String, ResourceMethod> method_set = marionete.get(http_method);
 		if(method_set != null) {
@@ -100,7 +100,7 @@ public class AppMarionete {
 					
 					Method m = method.getValue().getInvocable().getDefinitionMethod();
 					
-					Object[] args = parseArguments(m, path_params, query_params, body, content_type);
+					Object[] args = parseArguments(m, path_params, query_params, body, content_type, http_headers);
 					
 					return m.invoke(this.handler, args);
 					
@@ -111,7 +111,7 @@ public class AppMarionete {
 		throw new MethodNotFoundException(path + " does not match any method!");
 	}
 
-	private static Object[] parseArguments(Method m, Map<String, String> path_params, Map<String, String> query_params, byte[] body, String content_type) throws UnsupportedEncodingException {
+	private static Object[] parseArguments(Method m, Map<String, String> path_params, Map<String, String> query_params, byte[] body, String content_type, Map<String,String> http_headers) throws UnsupportedEncodingException {
 		List<Object> args = new ArrayList<>(m.getParameters().length);
 
 		for( Parameter p : m.getParameters() ) {
@@ -142,6 +142,8 @@ public class AppMarionete {
 						args.add(parseString(value, p.getType()));
 
 						//break;
+					} else if(a instanceof javax.ws.rs.core.Context) {
+						args.add(http_headers);
 					}
 				}
 			}

@@ -5,7 +5,7 @@ import java.security.KeyStore;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import rest.client.RestResponse;
+import rest.RestResponse;
 import rest.client.mySecureRestClient;
 import ssl.CustomSSLSocketFactory;
 

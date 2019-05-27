@@ -12,7 +12,7 @@ public class MarioneteTester {
 		
 		String body = new String("não desatina");
 		
-		marionete.invoke("POST", "/dispatcher/login/bina", body.getBytes(), MediaType.TEXT_PLAIN);
+		marionete.invoke("POST", "/dispatcher/login/bina", body.getBytes(), MediaType.TEXT_PLAIN, null);
 	}
 
 }

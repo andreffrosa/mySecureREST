@@ -21,4 +21,19 @@ public class ArrayUtil {
 		String s = ""
 	}*/
 	
+	public static byte[] unparse(String array) {
+		if(array == null)
+			return null;
+
+		String aux = array.substring(1, array.length()-1);
+		String s[] = aux.split(",");
+
+		byte[] result = new byte[s.length];
+
+		for(int i = 0; i < s.length; i++) {
+			result[i] = (byte) Integer.parseInt(s[i].trim().replace("0x", ""), 16);
+		}
+
+		return result;
+	}
 }

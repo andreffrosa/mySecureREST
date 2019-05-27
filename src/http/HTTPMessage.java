@@ -24,6 +24,10 @@ public abstract class HTTPMessage {
 		setBody(body, type);
 	}
 	
+	public Map<String, String> getHeaders() {
+		return headers;
+	}
+	
 	public String getHTTPVersion() {
 		return version;
 	}
