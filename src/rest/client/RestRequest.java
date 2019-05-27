@@ -46,6 +46,7 @@ public class RestRequest {
 	// private?
 	private RestResponse http_request(String method, Object entity) throws IOException {
 		
+			
 		// Colocar os queryParams no path
 		String query = "";
 		for(Entry<String,String> e : this.queryParams.entrySet()) {
