@@ -12,4 +12,5 @@ public interface Client {
 	
 	public RestRequest newRequest(String resource_path) throws UnknownHostException, IOException;
 	
+	
 }
