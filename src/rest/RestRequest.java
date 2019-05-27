@@ -41,11 +41,6 @@ public class RestRequest {
 		this.queryParams.put(URI_Utils.encode(key), URI_Utils.encode(value));
 		return this;
 	}
-
-	public RestRequest addHTTPHeader(String name, String value) {
-		http_headers.put(name, value);
-		return this;
-	}
 	
 	// private?
 	private RestResponse http_request(String method, Object entity) throws IOException {
