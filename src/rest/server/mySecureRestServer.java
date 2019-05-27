@@ -66,11 +66,13 @@ public class mySecureRestServer {
 						}
 					} catch(MethodNotFoundException e) {
 						// Send HTTP 404
-						reply = new HTTPReply("1.0", 404, "Not Found", null, e.getMessage().getBytes(), MediaType.TEXT_PLAIN);
+						byte[] message = e.getMessage() != null ? e.getMessage().getBytes() : "".getBytes();
+						reply = new HTTPReply("1.0", 404, "Not Found", null, message, MediaType.TEXT_PLAIN);
 					} catch(Exception e) {
 						// Send HTTP 500
-						reply = new HTTPReply("1.0", 500, "Internal Server Error", null, e.getMessage().getBytes(), MediaType.TEXT_PLAIN);
 						e.printStackTrace();
+						byte[] message = e.getMessage() != null ? e.getMessage().getBytes() : "".getBytes();
+						reply = new HTTPReply("1.0", 500, "Internal Server Error", null, message, MediaType.TEXT_PLAIN);
 					}		
 
 					// Send Reply
