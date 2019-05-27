@@ -38,8 +38,14 @@ public class RestRequest {
 		return this;
 	}
 
+	public RestRequest addHTTPHeader(String name, String value) {
+		http_headers.put(name, value);
+		return this;
+	}
+	
 	// private?
 	private RestResponse http_request(String method, Object entity) throws IOException {
+		
 		// Colocar os queryParams no path
 		String query = "";
 		for(Entry<String,String> e : this.queryParams.entrySet()) {
