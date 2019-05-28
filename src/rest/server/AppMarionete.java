@@ -149,7 +149,7 @@ public class AppMarionete {
 						javax.ws.rs.HeaderParam x = (javax.ws.rs.HeaderParam) a;
 						
 						String key = x.value();
-						String value = query_params.get(key);
+						String value = http_headers.get(key);
 
 						args.add(parseString(value, p.getType()));
 						//args.add(http_headers);
