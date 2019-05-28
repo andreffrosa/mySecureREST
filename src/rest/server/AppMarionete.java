@@ -60,8 +60,6 @@ public class AppMarionete {
 			String pathPrefix = current.getKey() + (resource.getPath() != null ? resource.getPath() : "" );
 
 			for (ResourceMethod method : resource.getAllMethods()) {
-			
-				System.out.println(method.toString());
 
 				// If has sub resources
 				if (method.getType().equals(ResourceMethod.JaxrsType.SUB_RESOURCE_LOCATOR)) {
@@ -78,7 +76,6 @@ public class AppMarionete {
 					}
 
 					http_method_map.put(pathPrefix, method);
-					System.out.println(http_method + " " +pathPrefix);
 				}
 			}
 
@@ -180,8 +177,6 @@ public class AppMarionete {
 		Map<String, String> map = new HashMap<String, String>();
 		UriTemplate template = new UriTemplate(pattern);
 
-		System.out.println(path + " " + pattern);
-		
 		if( template.match(path, map) ) {
 			return map;
 		} else {
