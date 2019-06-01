@@ -76,6 +76,7 @@ public class AppMarionete {
 					}
 
 					http_method_map.put(pathPrefix, method);
+					//System.out.println(pathPrefix + " " + method);
 				}
 			}
 
@@ -177,6 +178,8 @@ public class AppMarionete {
 		Map<String, String> map = new HashMap<String, String>();
 		UriTemplate template = new UriTemplate(pattern);
 
+		//System.out.println(path);
+		
 		if( template.match(path, map) ) {
 			return map;
 		} else {
